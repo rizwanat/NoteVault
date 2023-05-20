@@ -1,18 +1,28 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Pressable, StatusBar } from 'react-native'
 import React from 'react'
 
 const Home = ({navigation}:{navigation:any}) => {
 
     const handleCounter = () =>{
-        navigation.navigate('CounterHome');
+        navigation.navigate('Counter Home');
     }
 
     const handleList = () =>{
-        navigation.navigate('ListHome');
+        navigation.navigate('List Home');
+    }
+
+    const handleProfile = () => {
+        navigation.navigate('Profile');
+    }
+
+    const handleProfileUpdate = () => {
+        navigation.navigate('Profile Update');
     }
 
     return (
+        
         <View style={{flex:1}}>
+              
             <View style={styles.header}>
                 <Text style={styles.heading}>Welcome 😊</Text>
             </View>
@@ -29,6 +39,20 @@ const Home = ({navigation}:{navigation:any}) => {
                     >
                         <Text style={styles.text}>
                             Todo App
+                        </Text>
+                    </Pressable>
+                    <Pressable style={styles.button}
+                    onPress={handleProfile}
+                    >
+                        <Text style={styles.text}>
+                            Profile
+                        </Text>
+                    </Pressable>
+                    <Pressable style={styles.button}
+                    onPress={handleProfileUpdate}
+                    >
+                        <Text style={styles.text}>
+                            Profile Update
                         </Text>
                     </Pressable>
             </View>

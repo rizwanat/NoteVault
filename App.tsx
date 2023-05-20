@@ -1,43 +1,29 @@
 import React from "react";
-import { View } from "react-native";
-import Counter from "./src/Counter";
+import { StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Counter from "./src/Counter";
 import FlatListDemo from "./src/FlatListDemo";
 import Home from "./src/Home";
 import FlatListHome from "./src/FlatListHome";
 import CounterHome from "./src/CounterHome";
+import LoginScreen from "./src/LoginScreen";
+import ProfileUpdate from "./src/ProfileUpdate";
+import Profile from "./src/Profile";
+import StackNavigations from "./src/navigation/StackNavigations";
+import { SafeAreaView } from "react-native-safe-area-context";
+import DrawerNavigations from "./src/navigation/DrawerNavigations";
 
-const Stack = createNativeStackNavigator();
+// const Stack = createNativeStackNavigator();
 
 const App = () => {
   	return(
-		<View style={{flex:1}}>
+		<SafeAreaView style={{flex:1}}>
+			<StatusBar hidden />
 				<NavigationContainer>
-					<Stack.Navigator>
-						<Stack.Screen 
-							name="Home"
-							component={Home}
-						/>
-						<Stack.Screen 
-							name="CounterHome"
-							component={CounterHome}
-						/>
-						<Stack.Screen 
-							name="ListHome"
-							component={FlatListHome}
-						/>
-						<Stack.Screen 
-							name="Counter"
-							component={Counter}
-						/>
-						<Stack.Screen 
-							name="TodoList"
-							component={FlatListDemo}
-						/>
-					</Stack.Navigator>
+					<DrawerNavigations />
 				</NavigationContainer>
-		</View>
+		</SafeAreaView>
   	)
 }
 

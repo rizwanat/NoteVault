@@ -1,7 +1,19 @@
-import React from 'react'
-import { View, StyleSheet, Text, TextInput, Pressable } from 'react-native'
+import React,{useState} from 'react'
+import { View, StyleSheet, Text, TextInput, Pressable, Image, Alert } from 'react-native'
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}:{navigation:any}) => {
+	const [username,setUsername] = useState('');
+	const [pass,setPass] = useState('');
+
+	const handleLogin = () => {
+		console.log(username, "  :  " ,pass);
+		if(username == '' || pass == ''){
+			Alert.alert('username/password cannot be empty');
+		}
+		else{
+			navigation.navigate('Home');
+		}
+	}
 	return (
 		<View style={styles.container}>
 				<View style={{
@@ -10,34 +22,34 @@ const LoginScreen = () => {
 					
 				}}>
 					<Text style={styles.login}>Login</Text>
-					<TextInput style={styles.input} placeholder="Username" placeholderTextColor='skyblue'></TextInput>
-					<TextInput style={styles.input} placeholder="Password" placeholderTextColor='skyblue'></TextInput>
-					<Text style={{
-						textAlign: 'center',
-						fontSize: 16,
-						fontWeight : '400',
-						color : 'skyblue',
-						paddingBottom: 10
-					}}>Forgot Password?</Text>
+					<Image 
+						style = {styles.image}
+						source={require('./assets/user.png')}
+					/>
+					<TextInput 
+						style={styles.input} 
+						placeholder="Username" 
+						placeholderTextColor='skyblue'
+						onChangeText={(user)=>{setUsername(user)}}
+					/>
+					<TextInput 
+						style={styles.input} 
+						placeholder="Password" 
+						placeholderTextColor='skyblue'
+						onChangeText={(password) => {setPass(password)}}
+						/>
 				</View>
 				
-				<Pressable style={styles.loginButton}>
+				<Pressable 
+					style={styles.loginButton}
+					onPress={handleLogin}		
+				>
 					<Text style={{
-						fontSize : 16,
+						fontSize : 18,
 						fontWeight : '500',
 						color : 'darkblue',
 					}}>Login</Text>
 				</Pressable>
-
-				<View>
-					<Text style={{
-						textAlign: 'center',
-						fontSize: 16,
-						fontWeight : '400',
-						color : 'skyblue',
-						paddingBottom: 10
-					}}>New User? Sign Up</Text>
-				</View>
 		</View>
 	)
 }
@@ -59,7 +71,7 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 	input : {
-		fontSize: 16,
+		fontSize: 18,
 		textAlign : 'left',
 		borderRadius: 10,
 		borderWidth: 1,
@@ -67,7 +79,8 @@ const styles = StyleSheet.create({
 		width: 250,
 		padding:10,
 		paddingLeft: 20,
-		marginBottom: 15
+		marginBottom: 15,
+		color : 'skyblue',
 
 	},
 	loginButton : {
@@ -79,6 +92,13 @@ const styles = StyleSheet.create({
 		borderRadius: 4,
 		elevation: 10,
 		marginBottom: 10,
+	},
+	image : {
+		width : 100,
+		height : 100,
+		alignSelf : 'center',
+		margin : 10,
+		marginBottom : 15
 	}
 })
 

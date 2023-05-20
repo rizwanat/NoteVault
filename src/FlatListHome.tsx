@@ -1,13 +1,28 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native'
+import { View, Text, StyleSheet, TextInput, Pressable, Alert } from 'react-native'
+
+let detailsArray = [];
 
 const FlatListHome = ({navigation}:{navigation:any}) => {
 
-    const [category,setCategory] = useState('');
+    const [title,setTitle] = useState('');
+    const [desc,setDesc] = useState('');
+
+    
+
+    function handleAdd(){
+        detailsArray.push({
+            id : detailsArray.length + 1,
+            title : title,
+            desc : desc,
+        });
+        Alert.alert("Note added");
+        console.log(detailsArray);
+    }
 
     const handlePress = () => {
-        console.log('cat in homescreen: ' + category);
-        navigation.navigate('TodoList',{category});
+        console.log('cat in homescreen: ' + title);
+        navigation.navigate('TodoList',{detailsArray});
 
     }
 
@@ -16,16 +31,36 @@ const FlatListHome = ({navigation}:{navigation:any}) => {
             <View style={styles.header}>
                 <Text style={styles.heading}>Home Page</Text>
             </View>
+            {/* <View>
+                <Text>HJSBDH</Text>
+            </View> */}
             <View style={{display:'flex',flex:1,justifyContent:'center'}}>
                 <TextInput 
-                    onChangeText={(newName) => {setCategory(newName)}}
-                    placeholder='Name Your List...'
+                    onChangeText={(newName) => {setTitle(newName)}}
+                    placeholder='Note Title'
+                    placeholderTextColor='skyblue'
+                    style={styles.input}
+                />
+                <TextInput 
+                    onChangeText={(newName) => {setDesc(newName)}}
+                    placeholder='Description'
                     placeholderTextColor='skyblue'
                     style={styles.input}
                 />
                 <View style={{
-                    alignItems:'center'
+                    alignItems:'center',
+                    display : 'flex',
+                    justifyContent : 'space-between'
                 }}>
+                    <Pressable style={styles.button}
+                        onPress={handleAdd}
+                    >
+                        <Text style={{
+                            fontSize : 18,
+                            fontWeight : '500',
+                            color : 'skyblue',
+                        }}>Add</Text>
+			        </Pressable>
                     <Pressable style={styles.button}
                         onPress={handlePress}
                     >
@@ -33,10 +68,11 @@ const FlatListHome = ({navigation}:{navigation:any}) => {
                             fontSize : 18,
                             fontWeight : '500',
                             color : 'skyblue',
-                        }}>Todo List ➡️</Text>
+                        }}>To List</Text>
 			        </Pressable>
                 </View>
             </View>
+            
         </View>
     )
 };
@@ -66,6 +102,7 @@ const styles = StyleSheet.create({
         borderRadius : 10,
         color : 'skyblue',
         fontSize : 18,
+        height : 'auto'
     },
     button : {
 		backgroundColor : 'darkblue',

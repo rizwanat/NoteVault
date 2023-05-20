@@ -4,57 +4,25 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, Keyboard
 
 const FlatListDemo = ({route}:{route:any}) => {
 
-    console.log(route);
-    const [head,setHeading] = useState(route.params.category);
-    const [list,addList] = useState([]);
-    console.log('heading : ' + head);
-    const [text,setText] = useState("");
-
+    console.log("moving", route.params);
+    const [list,addList] = useState(route.params.detailsArray);
+    console.log("kitti ikka  " , list);
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.heading}>{head} List</Text>
+                <Text style={styles.heading}> List</Text>
             </View>
-            <View style={styles.inputbox}>
-                <TextInput 
-                style={styles.input} 
-                placeholder='Write a message'
-                placeholderTextColor='skyblue'
-                onChangeText={(input)=>{ 
-                    setText(input);
-                    console.log('text  : ' + text);
-                }}/>
-                <Pressable style={styles.button}
-                onPress={()=>{addList(() => {
-                    if(text!=''){
-                        console.log(list);
-                        console.log('in onpress: ' + text);
-                        return [...list,text];
-                    }
-                    else{
-                        console.log(list);
-                        
-                        return [...list];
-                    }
-                })}}>
-                    <Text style={{
-                        fontSize : 40,
-                        textAlign : 'center',
-                        alignSelf : 'center',
-                        color:'skyblue'
-                    }}>+</Text>
-                </Pressable>
-            </View>
+            
             <KeyboardAvoidingView style={{flex:1}}>
                 <FlatList 
                     data={list}
-                    keyExtractor={(item) => list.indexOf(item).toString()}
                     renderItem={
                         ({item}) => (
                         <TouchableOpacity style={styles.item}>
-                            <Text style={styles.text}>{item}</Text> 
+                            <Text style={styles.text}>{item.title}</Text> 
                         </TouchableOpacity>    
-                    )}    
+                    )}  
+                      
                 />
                 <Pressable >
                     <Text></Text>

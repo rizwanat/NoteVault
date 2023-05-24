@@ -1,29 +1,34 @@
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Alert } from 'react-native'
 import React,{ useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ProfileUpdate = ({navigation}:{navigation:any},props) => {
 
-    const initialValues = {
-        name : '',
-        email : '',
-        phone_number : '' ,
-        location : '',
-        age : '',
-    };
+    const [name,setName] = useState('');
+    const [email,setemail] = useState('');
+    const [phone_number,setPhone] = useState('');
+    const [age,setAge] = useState('');
+    const [location,setLocation] = useState('');
 
-    const [inputs,setInputs] = useState(initialValues);
-
-    const handleChange = (text,input) => {
-        setInputs(prevState => ({...prevState, [input]: text}));
+    const handleSubmit = async () =>{
+        try{
+            if(name=='' || email=='' || phone_number=='' || age=='' || location==''){
+                Alert.alert('Please fill all details');
+            }
+            else{
+                await AsyncStorage.setItem("name",name);
+                await AsyncStorage.setItem("email",email);
+                await AsyncStorage.setItem("phone_number",phone_number);
+                await AsyncStorage.setItem("age",age);
+                await AsyncStorage.setItem("location",location);
+                navigation.navigate('Profile Page');
+            }
+            
+        }catch(error){
+            console.log(error);
+        }
+        
     }
-
-    const handleSubmit = () =>{
-        console.log("in update", inputs);
-        navigation.navigate('Profile',inputs);
-    }
-
-    
-
 
     return (
         <View style={styles.container}>
@@ -34,7 +39,7 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                 <TextInput 
                     
                     id='name'
-                    onChangeText={text => handleChange(text,'name')}
+                    onChangeText={text => setName(text)}
                     placeholder='Full Name'
                     placeholderTextColor='skyblue'
                     style={styles.input}
@@ -43,7 +48,7 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                 <TextInput 
                     
                     id='email'
-                    onChangeText={text => handleChange(text,'email')}
+                    onChangeText={text => setemail(text)}
                     placeholder='Email'
                     placeholderTextColor='skyblue'
                     style={styles.input}
@@ -52,7 +57,7 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                 <TextInput 
                     
                     id='phone_number'
-                    onChangeText={text => handleChange(text,'phone_number')}
+                    onChangeText={text => setPhone(text)}
                     placeholder='Phone Number'
                     placeholderTextColor='skyblue'
                     style={styles.input}
@@ -61,7 +66,7 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                 <TextInput 
                     
                     id='age'
-                    onChangeText={text => handleChange(text,'age')}
+                    onChangeText={text => setAge(text)}
                     placeholder='Age'
                     placeholderTextColor='skyblue'
                     style={styles.input}
@@ -70,26 +75,12 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                 <TextInput 
                    
                     id='location'
-                    onChangeText={text => handleChange(text,'location')}
+                    onChangeText={text => setLocation(text)}
                     placeholder='Location'
                     placeholderTextColor='skyblue'
                     style={styles.input}
                     {...props}
                 />
-
-
-                {/* <Input
-                    onChangeText={text => handleChange(text, 'name')}
-                    placeholder="Enter your name"
-                />
-                <Input
-                    onChangeText={text => handleChange(text, 'email')}
-                    placeholder="Enter your email address"
-                />
-                <Input
-                    onChangeText={text => handleChange(text, 'phone_number')}
-                    placeholder="Enter your phone number"
-                /> */}
 
                 <View style={{
                     alignItems:'center'

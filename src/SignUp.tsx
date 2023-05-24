@@ -2,41 +2,61 @@ import React,{useEffect, useState} from 'react'
 import { View, StyleSheet, Text, TextInput, Pressable, Image, Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let users = [];
+// let user = '';
+// let password = '';
 
-const LoginScreen = ({navigation}:{navigation:any}) => {
+const SignUp = ({navigation}:{navigation:any}) => {
 	let [username,setUsername] = useState('');
 	let [pass,setPass] = useState('');
+    let [cnfpass,setCnfPass] = useState('');
 
-	async function getData(){
-		try{
-			const existingUsers = await AsyncStorage.getItem("users");
-			users = JSON.parse(existingUsers);
-			console.log("in login page users",users);
-		}catch(error){
-			console.log(error);
-		}
-	}
-	
-	function handlePress(){
-		navigation.navigate('SignUp');
-	}
+	// async function getData(){
+	// 	try{
+	// 		const tempuser = await AsyncStorage.getItem("username");
+	// 		const temppass = await AsyncStorage.getItem("password");
+	// 		console.log(tempuser,"  pass : ",temppass);
+	// 		user = tempuser;
+	// 		password = temppass;
+	// 		console.log("in login page username",user);
+	// 		console.log("in login page password",password);
+	// 	}catch(error){
+	// 		console.log(error);
+	// 	}
+	// }
 
-	const handleLogin = async () => {
+    const handlePress = () => {
+        navigation.navigate('Login');
+    }
+
+	const handleSignUp = async () => {
 		
-		console.log("entered creds: ",username, "  :  " ,pass);
-		if(username == '' || pass == ''){
-			Alert.alert('username/password cannot be empty');
+		console.log(username, "  :  " ,pass);
+		if(username == '' || pass == '' || cnfpass == ''){
+			Alert.alert('Fields cannot be empty');
 		}
 		else{
 			try{
-				if((users.find(user => user.username===username && user.pass===pass))){
-					await AsyncStorage.setItem("isLoggedIn",JSON.stringify(true));
-					Alert.alert('Logged in!');
-					navigation.navigate('DrawerStack');
+				const existingUsers = await AsyncStorage.getItem('users');
+				let users = [];
+				console.log("existing: ",existingUsers);
+				users = JSON.parse(existingUsers);
+				console.log("my users: ",users);
+				if(pass===cnfpass){
+					let userData = users.some(user => user.username===username)
+					if(userData){
+						Alert.alert('Username already exist');
+					}
+					else{
+						users.push({username, pass});
+						console.log(users);
+						await AsyncStorage.setItem('users',JSON.stringify(users));
+						Alert.alert('Successfully registered');
+                    	navigation.navigate('Login');
+					}
+					
 				}
 				else{
-					Alert.alert('Invalid username/password');
+					Alert.alert("Passwords don't match");
 				}
 				
 			}
@@ -47,9 +67,9 @@ const LoginScreen = ({navigation}:{navigation:any}) => {
 		}
 	}
 
-	useEffect(()=>{
-		getData();
-	},[]);
+	// useEffect(()=>{
+	// 	getData();
+	// },[]);
 
 	return (
 		<View style={styles.container}>
@@ -58,7 +78,7 @@ const LoginScreen = ({navigation}:{navigation:any}) => {
 					flexDirection : "column",
 					
 				}}>
-					<Text style={styles.login}>Login</Text>
+					<Text style={styles.login}>SignUp</Text>
 					<Image 
 						style = {styles.image}
 						source={require('./assets/user.png')}
@@ -74,7 +94,13 @@ const LoginScreen = ({navigation}:{navigation:any}) => {
 						placeholder="Password" 
 						placeholderTextColor='skyblue'
 						onChangeText={(password) => {setPass(password)}}
-						/>
+					/>
+                    <TextInput 
+						style={styles.input} 
+						placeholder="Confirm Password" 
+						placeholderTextColor='skyblue'
+						onChangeText={(cnfpassword) => {setCnfPass(cnfpassword)}}
+					/>
 				</View>
 				<Text style={{
 						fontSize : 16,
@@ -84,13 +110,13 @@ const LoginScreen = ({navigation}:{navigation:any}) => {
 					}} onPress={handlePress}>Already have account? Login</Text>
 				<Pressable 
 					style={styles.loginButton}
-					onPress={handleLogin}		
+					onPress={handleSignUp}
 				>
 					<Text style={{
 						fontSize : 18,
 						fontWeight : '500',
 						color : 'darkblue',
-					}}>Login</Text>
+					}}>Sign Up</Text>
 				</Pressable>
 		</View>
 	)
@@ -144,4 +170,4 @@ const styles = StyleSheet.create({
 	}
 })
 
-export default LoginScreen
+export default SignUp

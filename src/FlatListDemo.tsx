@@ -1,12 +1,45 @@
-import React,{useState} from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React,{useState, useEffect} from 'react'
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput, KeyboardAvoidingView, Pressable} from 'react-native';
 
+// let lists = [];
+const FlatListDemo = ({navigation}:{navigation:any}) => {
 
-const FlatListDemo = ({route}:{route:any}) => {
+    let [lists,setLists] = useState([]);
 
-    console.log("moving", route.params);
-    const [list,addList] = useState(route.params.detailsArray);
-    console.log("kitti ikka  " , list);
+    async function getData(){
+        try{
+            const mylist = await AsyncStorage.getItem('lists');
+            setLists(JSON.parse(mylist));
+            console.log("list in list: ",lists);
+            // console.log(lists[1].title);
+            // namesList = lists.map(item => item.title);
+            // console.log("name: ",namesList);
+
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    function handleList(){
+        navigation.navigate('Details',{item});
+    }
+
+    useEffect(()=>{
+        getData();
+    },[]);
+
+    // const renderItem = ({item}) => {
+    //     console.log("item: ",item);
+    //     return(
+    //         <TouchableOpacity style={styles.item} onPress={handleList}>
+    //             <Text style={styles.text}>{item}</Text> 
+    //         </TouchableOpacity>
+    //         // <Text style={styles.text}>{item}</Text> 
+    //     );
+        
+    // }
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -14,12 +47,21 @@ const FlatListDemo = ({route}:{route:any}) => {
             </View>
             
             <KeyboardAvoidingView style={{flex:1}}>
+                {/* <FlatList
+                    data={namesList}
+                    // keyExtractor={(item, index) => index.toString()}
+                    renderItem={({item}) => (
+                        <Text style={styles.text}>{item}</Text>
+                    )}
+                /> */}
                 <FlatList 
-                    data={list}
+                    data={lists}
+                    // keyExtractor={(item,index) => index.toString()}
+                    // renderItem={renderItem}
                     renderItem={
                         ({item}) => (
-                        <TouchableOpacity style={styles.item}>
-                            <Text style={styles.text}>{item.title}</Text> 
+                        <TouchableOpacity style={styles.item} onPress={()=>{navigation.navigate('Details',{item})}}>
+                            <Text style={styles.text}>{item["title"]}</Text> 
                         </TouchableOpacity>    
                     )}  
                       

@@ -1,30 +1,50 @@
-import React, { useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, Pressable, Alert } from 'react-native'
 
-let detailsArray = [];
+
 
 const FlatListHome = ({navigation}:{navigation:any}) => {
 
     const [title,setTitle] = useState('');
     const [desc,setDesc] = useState('');
-
     
-
-    function handleAdd(){
-        detailsArray.push({
-            id : detailsArray.length + 1,
-            title : title,
-            desc : desc,
-        });
-        Alert.alert("Note added");
-        console.log(detailsArray);
+    async function getData(){
+        try{
+            // await AsyncStorage.removeItem('lists');
+            const mylist = await AsyncStorage.getItem('lists');
+            let listDetails = [];
+            listDetails = JSON.parse(mylist);
+            console.log("my list: ",listDetails);
+        }catch(error){
+            console.log(error);
+        }
     }
 
-    const handlePress = () => {
-        console.log('cat in homescreen: ' + title);
-        navigation.navigate('TodoList',{detailsArray});
+    async function handleAdd(){
+        try{
+            const mylist = await AsyncStorage.getItem('lists');
+            let listDetails = [];
+            listDetails = JSON.parse(mylist);
+            console.log("my list: ",listDetails);
+            listDetails.push({title,desc});
+            console.log("new list",listDetails);
+            await AsyncStorage.setItem('lists',JSON.stringify(listDetails));
+            Alert.alert("Note added");
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    const handlePress = async () => {
+        // await AsyncStorage.setItem('lists',JSON.stringify(listDetails));
+        navigation.navigate('TodoList App');
 
     }
+
+    useEffect(()=>{
+        // getData();
+    },[]);
 
     return (
         <View style={styles.container}>

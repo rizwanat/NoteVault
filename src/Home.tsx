@@ -4,11 +4,11 @@ import React from 'react'
 const Home = ({navigation}:{navigation:any}) => {
 
     const handleCounter = () =>{
-        navigation.navigate('Counter Home');
+        navigation.navigate('Counter');
     }
 
     const handleList = () =>{
-        navigation.navigate('List Home');
+        navigation.navigate('List');
     }
 
     const handleProfile = () => {
@@ -16,7 +16,7 @@ const Home = ({navigation}:{navigation:any}) => {
     }
 
     const handleProfileUpdate = () => {
-        navigation.navigate('Profile Update');
+        navigation.navigate('Update Profile');
     }
 
     return (

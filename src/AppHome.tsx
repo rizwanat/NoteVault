@@ -1,7 +1,15 @@
 import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native'
 import React,{ useState } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const AppHome = ({navigation}:{navigation:any}) => {
+
+    const handleButton = async () =>{
+        const value = await AsyncStorage.getItem("isLoggedIn");
+        const isLogged = JSON.parse(value);
+        console.log("in home 1: ",isLogged);
+        {isLogged ? navigation.navigate('DrawerStack') : navigation.navigate('SignUp')}
+    }
 
     return (
         <View style={styles.container}>
@@ -11,13 +19,15 @@ const AppHome = ({navigation}:{navigation:any}) => {
             <View style={styles.header}>
                 <Text style={styles.heading}>Welcome to My App Toco</Text>
             </View>
-            {/* <Pressable style={styles.button}>
+            <Pressable style={styles.button}
+                onPress={handleButton}
+            >
                 <Text style={{
                     fontSize : 18,
                     fontWeight : '500',
                     color : 'skyblue',
-                }}>Login ➡️</Text>
-            </Pressable> */}
+                }}>➡️</Text>
+            </Pressable>
         </View>
     )
 };

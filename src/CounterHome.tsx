@@ -5,7 +5,7 @@ const CounterHome = ({navigation}:{navigation:any}) => {
 
     const [name,setName] = useState('');
     const handleCounter = () =>{
-        navigation.navigate('Counter',{name});
+        navigation.navigate('Counter App',{name});
     }
 
     return (

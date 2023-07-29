@@ -15,10 +15,6 @@ const Home = ({navigation}:{navigation:any}) => {
         navigation.navigate('Profile');
     }
 
-    const handleProfileUpdate = () => {
-        navigation.navigate('Update Profile');
-    }
-
     return (
         
         <View style={{flex:1}}>
@@ -46,13 +42,6 @@ const Home = ({navigation}:{navigation:any}) => {
                     >
                         <Text style={styles.text}>
                             Profile
-                        </Text>
-                    </Pressable>
-                    <Pressable style={styles.button}
-                    onPress={handleProfileUpdate}
-                    >
-                        <Text style={styles.text}>
-                            Profile Update
                         </Text>
                     </Pressable>
             </View>

@@ -6,12 +6,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Home from "./Home";
 import FlatListHome from "./FlatListHome";
 import CounterHome from "./CounterHome";
-import LoginScreen from "./LoginScreen";
 import ProfileUpdate from "./ProfileUpdate";
 import Profile from "./Profile";
 import FlatListDemo from './FlatListDemo';
 import Counter from './Counter';
-import AppHome from './AppHome';
 import DetailsScreen from './DetailsScreen';
 
 
@@ -56,24 +54,25 @@ const ListScreenStack = () => {
     );
 };
 
-const ProfileUpdateScreenStack = () => {
-    return (
-        <Stack.Navigator
-            screenOptions={{headerShown : false}}
-        >
-            <Stack.Screen 
-                name='Profile Update'
-                component={ProfileUpdate}
-            />
-        </Stack.Navigator>
-    );
-};
+// const ProfileUpdateScreenStack = () => {
+//     return (
+//         <Stack.Navigator
+//             screenOptions={{headerShown : false}}
+//         >
+//             <Stack.Screen 
+//                 name='Profile Update'
+//                 component={ProfileUpdate}
+//             />
+//         </Stack.Navigator>
+//     );
+// };
 
 const ProfileScreenStack = () => {
     return (
         <Stack.Navigator
             screenOptions={{headerShown : false}}
         >
+            
             <Stack.Screen 
                 name='Profile Page'
                 component={Profile}
@@ -82,20 +81,21 @@ const ProfileScreenStack = () => {
                 name='Profile Update'
                 component={ProfileUpdate}
             />
+            
         </Stack.Navigator>
     );
 };
 
-const LogoutScreenStack = ({navigation}) => {
-    return(
-        <Stack.Navigator
-            screenOptions={{headerShown : false}}
-        >
-            <Stack.Screen name='Home 1' component={AppHome} />
-            <Stack.Screen name='Login' component={LoginScreen} />
-        </Stack.Navigator>
-    )
-};
+// const LogoutScreenStack = ({navigation}) => {
+//     return(
+//         <Stack.Navigator
+//             screenOptions={{headerShown : false}}
+//         >
+//             <Stack.Screen name='Home 1' component={AppHome} />
+//             <Stack.Screen name='Login' component={LoginScreen} />
+//         </Stack.Navigator>
+//     )
+// };
 
 const DrawerStack = ({navigation}:{navigation:any}) => {
     let isLogged = false;

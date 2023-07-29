@@ -9,17 +9,17 @@ const FlatListHome = ({navigation}:{navigation:any}) => {
     const [title,setTitle] = useState('');
     const [desc,setDesc] = useState('');
     
-    async function getData(){
-        try{
-            // await AsyncStorage.removeItem('lists');
-            const mylist = await AsyncStorage.getItem('lists');
-            let listDetails = [];
-            listDetails = JSON.parse(mylist);
-            console.log("my list: ",listDetails);
-        }catch(error){
-            console.log(error);
-        }
-    }
+    // async function getData(){
+    //     try{
+    //         // await AsyncStorage.removeItem('lists');
+    //         const mylist = await AsyncStorage.getItem('lists');
+    //         let listDetails = [];
+    //         listDetails = JSON.parse(mylist);
+    //         console.log("my list: ",listDetails);
+    //     }catch(error){
+    //         console.log(error);
+    //     }
+    // }
 
     async function handleAdd(){
         try{
@@ -42,9 +42,9 @@ const FlatListHome = ({navigation}:{navigation:any}) => {
 
     }
 
-    useEffect(()=>{
-        // getData();
-    },[]);
+    // useEffect(()=>{
+    //     // getData();
+    // },[]);
 
     return (
         <View style={styles.container}>

@@ -2,27 +2,10 @@ import React,{useEffect, useState} from 'react'
 import { View, StyleSheet, Text, TextInput, Pressable, Image, Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// let user = '';
-// let password = '';
-
 const SignUp = ({navigation}:{navigation:any}) => {
 	let [username,setUsername] = useState('');
 	let [pass,setPass] = useState('');
     let [cnfpass,setCnfPass] = useState('');
-
-	// async function getData(){
-	// 	try{
-	// 		const tempuser = await AsyncStorage.getItem("username");
-	// 		const temppass = await AsyncStorage.getItem("password");
-	// 		console.log(tempuser,"  pass : ",temppass);
-	// 		user = tempuser;
-	// 		password = temppass;
-	// 		console.log("in login page username",user);
-	// 		console.log("in login page password",password);
-	// 	}catch(error){
-	// 		console.log(error);
-	// 	}
-	// }
 
     const handlePress = () => {
         navigation.navigate('Login');
@@ -66,10 +49,6 @@ const SignUp = ({navigation}:{navigation:any}) => {
 			
 		}
 	}
-
-	// useEffect(()=>{
-	// 	getData();
-	// },[]);
 
 	return (
 		<View style={styles.container}>

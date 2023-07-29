@@ -1,14 +1,21 @@
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Alert } from 'react-native'
-import React,{ useState } from 'react'
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Alert, Image, PermissionsAndroid } from 'react-native'
+import React,{ useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useDispatch} from 'react-redux';
+import { getDetails } from './redux/reducer';
+
+var ImagePicker = require('react-native-image-picker');
 
 const ProfileUpdate = ({navigation}:{navigation:any},props) => {
+    
+    const dispatch = useDispatch(); //to update the states
 
     const [name,setName] = useState('');
-    const [email,setemail] = useState('');
+    const [email,setEmail] = useState('');
     const [phone_number,setPhone] = useState('');
     const [age,setAge] = useState('');
     const [location,setLocation] = useState('');
+    const [photo,setPhoto] = useState('');
 
     const handleSubmit = async () =>{
         try{
@@ -21,6 +28,16 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                 await AsyncStorage.setItem("phone_number",phone_number);
                 await AsyncStorage.setItem("age",age);
                 await AsyncStorage.setItem("location",location);
+                await AsyncStorage.setItem("profilephoto",photo);
+                dispatch(getDetails({
+                    name : name,
+                    email : email,
+                    phone_number :phone_number,
+                    age : age,
+                    location : location,
+                    photo : photo
+                  }))
+                // await AsyncStorage.setItem("profilephoto",JSON.stringify(photo));
                 navigation.navigate('Profile Page');
             }
             
@@ -30,12 +47,127 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
         
     }
 
+    const options = {
+        mediaTypes: 'photo',
+        allowsEditing: true,
+        aspect: [1,1],
+        quality: 1,
+    };
+
+    async function handleGallery(){
+        
+
+        ImagePicker.launchImageLibrary(options, async (response) => {
+            if (response.didCancel) {
+              console.log('User cancelled image picker');
+            } else if (response.error) {
+              console.log('ImagePicker Error: ', response.error);
+            }else if (response.customButton) {
+                console.log('ImagePicker Error: ', response.customButton);
+            }
+             else {
+                console.log(response);
+                const photoUri = {uri : response.assets[0].uri};
+                console.log("ph: ",photoUri.uri);
+                setPhoto(photoUri.uri);
+                const result = await fetch(response.assets[0].uri);
+                const filename = response.assets[0].uri.substring(response.assets[0].uri);
+                console.log("uri: ",filename);
+              // Save the profile photo URI to AsyncStorage
+            }
+          });
+    }
+
+    function handleCamera(){
+        PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA).then((result) => {
+                if (result === PermissionsAndroid.RESULTS.GRANTED){
+                    ImagePicker.launchCamera({}, response => {
+                        console.log("response: ",response);
+                        if(response.didCancel){
+                            console.log("cancelled");
+                        }
+                        else if(response.error){
+                            console.log("error",response.error);
+                        }
+                        else if(response.customButton){
+                            console.log("custom button: ",response.customButton);
+                        }
+                        else{
+                            setPhoto(response.assets[0].uri);
+                            
+                        }
+                    })
+                }
+                else{
+                    console.log("permission denied");
+                }
+            });
+    }
+
+    async function getData() {
+        try{
+            let value;
+            value = await AsyncStorage.getItem("name");
+            setName(value);
+            value = await AsyncStorage.getItem("email");
+            setEmail(value);
+            value = await AsyncStorage.getItem("phone_number");
+            setPhone(value);
+            value = await AsyncStorage.getItem("age");
+            setAge(value);
+            value = await AsyncStorage.getItem("location");
+            setLocation(value);
+            value = await AsyncStorage.getItem("profilephoto");
+            console.log("jabaa: ",value);
+            // setPhoto(JSON.parse(value));
+            setPhoto(value);
+            console.log(name," : ",email);
+            console.log("image: ",photo);
+        }catch(error){
+            console.log(error);
+        }
+    }
+
+    useEffect(()=>{
+        getData();
+    },[]);
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.heading}>Update Your Profile</Text>
             </View>
             <ScrollView style={{display:'flex',flex:1}}>
+                <View style={styles.imagecontainer}>
+                    {photo ? (
+                            <Image source={{uri : photo}} style={styles.image} />
+                        ) : (
+                            <Text style={{textAlign : 'center'}}>No photo selected</Text>
+                    )}
+                </View>
+                <View style={{alignItems:'center',display : 'flex',flexDirection : 'row', justifyContent:'center'}}>
+                    <Pressable onPress={handleGallery} style={styles.button}>
+                        <Text style={{
+                                fontSize : 18,
+                                fontWeight : '500',
+                                color : 'skyblue',
+                            }}>
+                            Choose Photo
+                        </Text>
+                    </Pressable>
+                    <Pressable onPress={handleCamera} style={styles.button}>
+                        <Text style={{
+                                fontSize : 18,
+                                fontWeight : '500',
+                                color : 'skyblue',
+                            }}>
+                            Open Camera
+                        </Text>
+                    </Pressable>
+                </View>
+                
+                    
                 <TextInput 
                     
                     id='name'
@@ -44,15 +176,17 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                     placeholderTextColor='skyblue'
                     style={styles.input}
                     {...props}
+                    defaultValue={name}
                 />
                 <TextInput 
                     
                     id='email'
-                    onChangeText={text => setemail(text)}
+                    onChangeText={text => setEmail(text)}
                     placeholder='Email'
                     placeholderTextColor='skyblue'
                     style={styles.input}
                     {...props}
+                    defaultValue={email}
                 />
                 <TextInput 
                     
@@ -62,6 +196,7 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                     placeholderTextColor='skyblue'
                     style={styles.input}
                     {...props}
+                    defaultValue={phone_number}
                 />
                 <TextInput 
                     
@@ -71,6 +206,7 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                     placeholderTextColor='skyblue'
                     style={styles.input}
                     {...props}
+                    defaultValue={age}
                 />
                 <TextInput 
                    
@@ -80,6 +216,7 @@ const ProfileUpdate = ({navigation}:{navigation:any},props) => {
                     placeholderTextColor='skyblue'
                     style={styles.input}
                     {...props}
+                    defaultValue={location}
                 />
 
                 <View style={{
@@ -142,6 +279,21 @@ const styles = StyleSheet.create({
         borderColor : 'skyblue'
 
 	},
+    image : {
+        alignSelf : 'center',
+        width : 100,
+        height : 100,
+        borderRadius : 999,
+    },
+    imagecontainer : {
+        alignContent : 'center',
+        alignSelf : 'center',
+        justifyContent : 'center',
+        width : 100,
+        height : 100,
+        borderRadius : 999,
+        backgroundColor : 'darkgray'
+    }
 })
 
-export default ProfileUpdate
+export default ProfileUpdate;

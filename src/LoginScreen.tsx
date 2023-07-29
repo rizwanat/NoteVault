@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react'
 import { View, StyleSheet, Text, TextInput, Pressable, Image, Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-let users = [];
+let users: any[] = [];
 
 const LoginScreen = ({navigation}:{navigation:any}) => {
 	let [username,setUsername] = useState('');

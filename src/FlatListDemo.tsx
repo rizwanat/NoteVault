@@ -12,33 +12,15 @@ const FlatListDemo = ({navigation}:{navigation:any}) => {
             const mylist = await AsyncStorage.getItem('lists');
             setLists(JSON.parse(mylist));
             console.log("list in list: ",lists);
-            // console.log(lists[1].title);
-            // namesList = lists.map(item => item.title);
-            // console.log("name: ",namesList);
 
         }catch(error){
             console.log(error);
         }
     }
-
-    function handleList(){
-        navigation.navigate('Details',{item});
-    }
-
+    
     useEffect(()=>{
         getData();
     },[]);
-
-    // const renderItem = ({item}) => {
-    //     console.log("item: ",item);
-    //     return(
-    //         <TouchableOpacity style={styles.item} onPress={handleList}>
-    //             <Text style={styles.text}>{item}</Text> 
-    //         </TouchableOpacity>
-    //         // <Text style={styles.text}>{item}</Text> 
-    //     );
-        
-    // }
 
     return (
         <View style={styles.container}>
@@ -47,17 +29,8 @@ const FlatListDemo = ({navigation}:{navigation:any}) => {
             </View>
             
             <KeyboardAvoidingView style={{flex:1}}>
-                {/* <FlatList
-                    data={namesList}
-                    // keyExtractor={(item, index) => index.toString()}
-                    renderItem={({item}) => (
-                        <Text style={styles.text}>{item}</Text>
-                    )}
-                /> */}
                 <FlatList 
                     data={lists}
-                    // keyExtractor={(item,index) => index.toString()}
-                    // renderItem={renderItem}
                     renderItem={
                         ({item}) => (
                         <TouchableOpacity style={styles.item} onPress={()=>{navigation.navigate('Details',{item})}}>
